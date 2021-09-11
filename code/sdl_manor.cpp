@@ -3,6 +3,6 @@
 
 int main(int argc, char *argv[])
 {
-  SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Handmade Hero", "This is Handmade Hero", 0);
+  SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Manor", "Test", 0);
   return(0);
 }
