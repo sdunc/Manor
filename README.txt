@@ -1,3 +1,5 @@
 Manor
 
-A house game.
+Explore a garden, a house, and below.
+
+
