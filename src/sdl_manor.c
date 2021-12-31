@@ -5,9 +5,6 @@
 void SDLResizeTexture(SDL_Renderer* Renderer, int Width, int Height) {
   int TextureWidth = 1;
 
-  if (Pixels)
-    free(Pixels);
-  
   SDL_Texture* Texture = SDL_CreateTexture(Renderer,
 					   SDL_PIXELFORMAT_ARGB8888,
 					   SDL_TEXTUREACCESS_STREAMING,
@@ -25,7 +22,6 @@ void SDLResizeTexture(SDL_Renderer* Renderer, int Width, int Height) {
     }
   
   SDL_RenderCopy(Renderer, Texture, 0, 0);
-  return 1;
 }
 
 
