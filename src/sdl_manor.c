@@ -2,12 +2,30 @@
 // C w/ SDL library
 #include <SDL.h>
 
-int SDLResizeTexture(SDL_Renderer* Renderer, int Width, int Height) {
-  // Whenever our window size changes we need to update the textures
-  // being drawn to the screen
+void SDLResizeTexture(SDL_Renderer* Renderer, int Width, int Height) {
+  int TextureWidth = 1;
+
+  if (Pixels)
+    free(Pixels);
   
+  SDL_Texture* Texture = SDL_CreateTexture(Renderer,
+					   SDL_PIXELFORMAT_ARGB8888,
+					   SDL_TEXTUREACCESS_STREAMING,
+					   Width, Height);
+  void* Pixels = malloc(Width*Height*4);
 
+  // if we already have a Texture we can destroy it
+  if (Texture)
+    SDL_DestroyTexture(Texture);
 
+  if ( SDL_UpdateTexture(Texture, NULL, Pixels, TextureWidth * 4) )
+    {
+      // do something about error! 
+      printf("Error! SDL_UpdateTexture() failed.\n");
+    }
+  
+  SDL_RenderCopy(Renderer, Texture, 0, 0);
+  return 1;
 }
 
 
@@ -75,8 +93,7 @@ int main(int argc, char* argv[]) {
   // TODO(Stephen) check for errors when calling these SDL create
   // window/rendererfunctions. Also go through with SDL wiki and document
   Renderer = SDL_CreateRenderer(Window, -1, 0);
-  
-  
+    
   for(;;) {
     SDL_Event Event;
     SDL_WaitEvent(&Event);
