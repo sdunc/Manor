@@ -1,5 +1,3 @@
 Manor
 
-Explore a garden, a house, and below.
-
-
+Requires libsdl2-dev
