@@ -2,24 +2,35 @@
 // C w/ SDL library
 #include <SDL.h>
 
-int HandleEvent(SDL_Event* Event)
-{
+int SDLResizeTexture(SDL_Renderer* Renderer, int Width, int Height) {
+  // Whenever our window size changes we need to update the textures
+  // being drawn to the screen
+  
+
+
+}
+
+
+int HandleEvent(SDL_Event* Event) {
   int ShouldQuit = 0;
+
   switch(Event->type) {
   case SDL_QUIT: 
-    {
-      printf("SDL_QUIT\n");
-      ShouldQuit = 1;
-    } break;
+    printf("SDL_QUIT\n");
+    ShouldQuit = 1;
+    break;
   case SDL_WINDOWEVENT:
     {
-      switch(Event->window.event)
-	{
+      switch(Event->window.event) {
 	case SDL_WINDOWEVENT_SIZE_CHANGED:
 	  {
-	    printf("SDL_WINDOWEVENT_SIZE_CHANGED (%d,%d)\n", 
-		   Event->window.data1, Event->window.data2);
-		  }
+	    SDL_Window* Window = SDL_GetWindowFromID(Event->window.windowID);
+	    SDL_Renderer* Renderer = SDL_GetRenderer(Window);
+ 
+	    int Width, Height;
+	    SDL_GetWindowSize(Window, &Width, &Height);
+	    SDLResizeTexture(Renderer, Width, Height);
+	  }
 	case SDL_WINDOWEVENT_EXPOSED:
 	  { 
 	    SDL_Window* Window = SDL_GetWindowFromID(Event->window.windowID);
@@ -43,9 +54,8 @@ int HandleEvent(SDL_Event* Event)
 }
 
 
-int main(int argc, char* argv[])
-{
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+int main(int argc, char* argv[]) {
+  if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
     // Unrecoverable error, exit here.
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Manor",
 			     "Error! SDL_Init didn't work!", 0);
@@ -55,7 +65,7 @@ int main(int argc, char* argv[])
   SDL_Window* Window;
   SDL_Renderer* Renderer;
   SDL_Texture* Texture;
-  
+
   Window = SDL_CreateWindow("Manor",
 			    SDL_WINDOWPOS_UNDEFINED,
 			    SDL_WINDOWPOS_UNDEFINED,
@@ -66,22 +76,13 @@ int main(int argc, char* argv[])
   // window/rendererfunctions. Also go through with SDL wiki and document
   Renderer = SDL_CreateRenderer(Window, -1, 0);
   
-  int width, height;
-  SDL_GetWindowSize(Window, &width, &height);
-
-  Texture = SDL_CreateTexture(Renderer,
-			      SDL_PIXELFORMAT_ARGB8888,
-			      SDL_TEXTUREACCESS_STREAMING,
-			      width,
-			      height);
   
   for(;;) {
     SDL_Event Event;
     SDL_WaitEvent(&Event);
-    if (HandleEvent(&Event))
-      {
-	break;
-      }
+    if (HandleEvent(&Event)) {
+      break;
+    }
   }
   
   SDL_Quit();
