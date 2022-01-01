@@ -1,5 +1,3 @@
-// Entry point for Manor 
-// C w/ SDL library
 #include <SDL.h>
 
 void SDLResizeTexture(SDL_Renderer* Renderer, int Width, int Height) {
@@ -12,8 +10,8 @@ void SDLResizeTexture(SDL_Renderer* Renderer, int Width, int Height) {
   void* Pixels = malloc(Width*Height*4);
 
   // if we already have a Texture we can destroy it
-  if (Texture)
-    SDL_DestroyTexture(Texture);
+  /* if (Texture) */
+  /*   SDL_DestroyTexture(Texture); */
 
   if ( SDL_UpdateTexture(Texture, NULL, Pixels, TextureWidth * 4) )
     {
