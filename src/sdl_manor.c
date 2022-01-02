@@ -8,22 +8,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* LDM: Evil! 
+   TODO(Stephen) Remove need for globals? */
+
 static SDL_Texture* Texture;
-static void* Pixels;
-static int TextureWidth;
+static void* BitmapMemory;
+static int BitmapWidth;
+int BytesPerPixel = 4;
 
 void SDLResizeTexture(SDL_Renderer* Renderer, int Width, int Height) {
-     if (Pixels) { free(Pixels); }
+     if (BitmapMemory) { free(BitmapMemory); }
      if (Texture) { SDL_DestroyTexture(Texture); }
      
      Texture = SDL_CreateTexture(Renderer, 
 				 SDL_PIXELFORMAT_ARGB8888,
 				 SDL_TEXTUREACCESS_STREAMING,
 				 Width, Height);
-     TextureWidth = Width;
-     Pixels = malloc(Width * Height * 4);
+     BitmapWidth = Width;
+     BitmapMemory = malloc(Width * Height * BytesPerPixel);
   
-     if ( SDL_UpdateTexture(Texture, NULL, Pixels, TextureWidth * 4) )
+     if ( SDL_UpdateTexture(Texture, NULL, BitmapMemory, BitmapWidth * BytesPerPixel) )
      {
 	  // do something about error! 
 	  printf("Error! SDL_UpdateTexture() failed.\n");
@@ -34,7 +38,7 @@ void SDLResizeTexture(SDL_Renderer* Renderer, int Width, int Height) {
 
 
 void SDLUpdateWindow(SDL_Window* Window, SDL_Renderer* Renderer) {
-     SDL_UpdateTexture(Texture, 0, Pixels, TextureWidth * 4);
+     SDL_UpdateTexture(Texture, 0, BitmapMemory, BitmapWidth * BytesPerPixel);
      SDL_RenderCopy(Renderer, Texture, 0, 0);
      SDL_RenderPresent(Renderer);
 }
